@@ -114,17 +114,17 @@ void printArray(int maze[N][N]) {
 }
 
 int main() {
+
     // this program calculates the number of quique paths
     // from upper left to defined locatoin (as of right now)
     // written by Philip Kuo
     // based on Judy's research topic
 
-    cout << endl << "已輸入圖形（in development）" << endl;
-
     int des_x = 0;
     int des_y = 0;
-
     int path_length = 0;
+
+    cout << endl << "輸入圖形（於 main.cpp）：完成" << endl;
 
     cout << endl << "輸入終點座標 (x, y) 左上基準為 (1, 1)：" << endl;
 
@@ -133,20 +133,22 @@ int main() {
 
     cout << "輸入 y 值：";
     cin >> des_x;
+
     cout << endl;
 
     cout << "輸入路線長：";
     cin >> path_length;
+
     cout << endl;
 
-    des_x--;
-    des_y--;
+    des_x--; // so that the upper right corner can be
+    des_y--; // entered as (1, 1) and not (0, 0).
 
     int maze[N][N] = {{1, 1, 1, 0, 0},
                       {1, 1, 1, 0, 0},
-                      {1, 1, 1, 1, 0},
-                      {0, 0, 1, 1, 0},
-                      {0, 0, 1, 1, 0}};
+                      {1, 1, 1, 1, 1},
+                      {0, 0, 1, 1, 1},
+                      {0, 0, 1, 1, 1}};
 
     printArray(maze);
 
