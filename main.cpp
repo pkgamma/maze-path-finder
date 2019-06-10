@@ -169,8 +169,8 @@ int main() {
     int path_length = 0;
 
     cout << endl;
-    cout << "輸入圖形（於 main.cpp）：完成" << endl;
-    cout << "輸入起點座標（1, 1）：完成" << endl;
+    cout << "圖形於 main.cpp 輸入完成" << endl;
+    cout << "起點座標完成" << endl;
     cout << "輸入終點座標 (x, y)：" << endl;
     cout << "    輸入 x 值：";
     cin >> des_y;
@@ -187,8 +187,6 @@ int main() {
     int start_x = findStartX(maze);
     int start_y = 0;
 
-    printArray(maze, start_x, des_x, des_y);
-
     int count = 0;
 
     memset(visited, 0, sizeof visited);
@@ -198,6 +196,9 @@ int main() {
     countPaths(maze, path_length, start_x, des_x, des_y, start_y, start_x, visited, count);
 
     cout << "由起點（左上）至終點，共有 " << count << " 條路徑" << endl;
+    cout << endl;
+
+    printArray(maze, start_x, des_x, des_y);
 
     return 0;
 }
