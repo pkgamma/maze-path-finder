@@ -202,6 +202,10 @@ int main() {
     cin >> des_y;
     cout << "    輸入 y 值：";
     cin >> des_x;
+    while ((des_x - 1) % 2 == 1) {
+        cout << "    我感覺你輸入錯了，請再試一次。輸入 y 值：";
+        cin >> des_x;
+    }
     cout << "----------------------------------------" << endl;
     cout << "1 ：自動尋找所有路徑長（高至 100）" << endl;
     cout << "2 ：手動輸入路線長" << endl;
@@ -242,10 +246,19 @@ int main() {
         exit(0);
 
     } else {
+        cout << "----------------------------------------" << endl;
+        cout << "輸入 -1 離開程式" << endl;
         while (true) {
             cout << "----------------------------------------" << endl;
             cout << "輸入路線長：";
-            cin >> path_length;
+
+            // cin with exception prevention
+            // taken from: https://stackoverflow.com/questions/10828937/how-to-make-cin-take-only-numbers
+            while (!(cin >> path_length)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "只能輸入數字喔！請重試一次：";
+            }
 
             if (path_length == -1) {
                 cout << "----------------------------------------" << endl;
