@@ -13,8 +13,11 @@ bool isValidCell(int x, int y) {
     return true;
 }
 
-void countPaths(int maze[N][N], int path_length, int des_x, int des_y, int x,
+void countPaths(int maze[N][N], int path_length, int start_x, int des_x, int des_y, int x,
                 int y, int visited[N][N], int& count) {
+
+    // note: the x and y notation is flipped here.
+
     if (x == des_x && y == des_y && path_length == 0) {
         count++;
         return;
@@ -28,23 +31,23 @@ void countPaths(int maze[N][N], int path_length, int des_x, int des_y, int x,
 
     if (isValidCell(x, y) && maze[x][y]) {
         // go down
-        if (x + 1 < N && !visited[x + 1][y] && y % 2 == 0) {
-            countPaths(maze, path_length - 1, des_x, des_y, x + 1, y, visited,
+        if (x + 1 < N && !visited[x + 1][y] && ((y + start_x) % 2 == 0)) {
+            countPaths(maze, path_length - 1, start_x, des_x, des_y, x + 1, y, visited,
                        count);
         }
         // go up
-        if (x - 1 >= 0 && !visited[x - 1][y] && y % 2 == 1) {
-            countPaths(maze, path_length - 1, des_x, des_y, x - 1, y, visited,
+        if (x - 1 >= 0 && !visited[x - 1][y] && ((y + start_x) % 2 == 1)) {
+            countPaths(maze, path_length - 1, start_x, des_x, des_y, x - 1, y, visited,
                        count);
         }
         // go right
         if (y + 1 < N && !visited[x][y + 1] && x % 2 == 0) {
-            countPaths(maze, path_length - 1, des_x, des_y, x, y + 1, visited,
+            countPaths(maze, path_length - 1, start_x, des_x, des_y, x, y + 1, visited,
                        count);
         }
         // go left
         if (y - 1 >= 0 && !visited[x][y - 1] && x % 2 == 1) {
-            countPaths(maze, path_length - 1, des_x, des_y, x, y - 1, visited,
+            countPaths(maze, path_length - 1, start_x, des_x, des_y, x, y - 1, visited,
                        count);
         }
     }
@@ -52,14 +55,16 @@ void countPaths(int maze[N][N], int path_length, int des_x, int des_y, int x,
     visited[x][y] = 0;
 }
 
-void findStartX(int maze[N][N], int& start_x) {
+int findStartX(int maze[N][N]) {
+    int start_x = 0;
     for (int i = 0; i < N; i++) {
         if (maze[0][i] == 1) {
-            break;
+            return start_x;
         } else {
             start_x++;
         }
     }
+    return 0;
 }
 
 void printArray(int maze[N][N], int start_x) {
@@ -144,7 +149,7 @@ int main() {
     // ========================================
     // ========================================
 
-    int maze[N][N] = {{1, 1, 1, 0, 0},
+    int maze[N][N] = {{0, 1, 1, 0, 0},
                       {1, 1, 1, 0, 0},
                       {1, 1, 1, 0, 0},
                       {0, 0, 0, 0, 0},
@@ -175,9 +180,8 @@ int main() {
     des_x--;  // so that the upper right corner can be
     des_y--;  // entered as (1, 1) and not (0, 0).
 
-    int start_x;
-
-    findStartX(maze, start_x);
+    int start_x = findStartX(maze);
+    int start_y = 0;
 
     printArray(maze, start_x);
 
@@ -187,7 +191,7 @@ int main() {
 
     // start from upper left (0, 0).
 
-    countPaths(maze, path_length, des_x, des_y, 0, 0, visited, count);
+    countPaths(maze, path_length, start_x, des_x, des_y, start_y, start_x, visited, count);
 
     cout << "由起點（左上）至終點，共有 " << count << " 條路徑" << endl;
 
