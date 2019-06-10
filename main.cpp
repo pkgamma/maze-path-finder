@@ -3,7 +3,7 @@
 
 using namespace std;
 
-#define N 7
+#define N 8
 
 bool isValidCell(int x, int y) {
     if (x < 0 || y < 0 || x >= N || y >= N) {
@@ -11,6 +11,19 @@ bool isValidCell(int x, int y) {
     }
 
     return true;
+}
+
+int findStartingEmptyRow(int maze[N][N]) {
+    int start_empty_y = 0;
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (maze[i][j] == 1) {
+                start_empty_y++;
+                break;
+            }
+        }
+    }
+    return start_empty_y;
 }
 
 void countPaths(int maze[N][N], int path_length, int start_x, int des_x,
@@ -84,7 +97,9 @@ void printArray(int maze[N][N], int start_x, int des_x, int des_y) {
 
     // clean print rest of maze
 
-    for (int i = 0; i < N; i++) {
+    int start_empty_y = findStartingEmptyRow(maze);
+
+    for (int i = 0; i < start_empty_y; i++) {
         string temp = "";
         for (int j = 0; j < N; j++) {
             if (maze[i][j] == 1) {
@@ -97,11 +112,15 @@ void printArray(int maze[N][N], int start_x, int des_x, int des_y) {
                         } else {
                             cout << "← ";
                         }
-                    } else if (i == des_x && j == des_y) {
-                        cout << "→ ";
                     } else {
-                        cout << "  ";
+                        if (j != des_y) {
+                            cout << "  ";
+                        }
                     }
+                }
+
+                if (i == des_x && j == des_y) {
+                    cout << "→ ";
                 }
 
                 if (i != N - 1) {
@@ -149,12 +168,22 @@ int main() {
     // =========== Input Maze Here ============
     // ========================================
     // ========================================
+    // == remember to change defined N size ===
 
     int maze[N][N] = {
-        {0, 0, 1, 1, 1, 0, 0}, {1, 1, 1, 1, 1, 0, 0}, {1, 1, 1, 1, 1, 1, 0},
-        {0, 0, 1, 1, 1, 1, 0}, {0, 0, 1, 1, 1, 1, 0}, {0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 1, 1, 0, 0, 0}, {1, 1, 1, 1, 1, 0, 0, 0},
+        {1, 1, 1, 1, 1, 1, 1, 0}, {0, 0, 1, 1, 1, 1, 1, 0},
+        {0, 0, 1, 1, 1, 1, 1, 1}, {0, 0, 0, 0, 1, 1, 1, 1},
+        {0, 0, 0, 0, 1, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0},
     };
+
+    // int maze[N][N] = {{0, 0, 1, 1, 1, 0, 0},
+    //                   {1, 1, 1, 1, 1, 0, 0},
+    //                   {1, 1, 1, 1, 1, 1, 0},
+    //                   {0, 0, 1, 1, 1, 1, 0},
+    //                   {0, 0, 1, 1, 1, 1, 0},
+    //                   {0, 0, 0, 0, 0, 0, 0},
+    //                   {0, 0, 0, 0, 0, 0, 0},};
 
     // ========================================
     // ========================================
@@ -164,6 +193,7 @@ int main() {
     int des_x = 0;
     int des_y = 0;
     int path_length = 0;
+    int mode_select = 0;
 
     cout << "----------------------------------------" << endl;
     cout << "圖形於 main.cpp 輸入完成" << endl;
@@ -172,6 +202,11 @@ int main() {
     cin >> des_y;
     cout << "    輸入 y 值：";
     cin >> des_x;
+    cout << "----------------------------------------" << endl;
+    cout << "1 ：自動尋找所有路徑長（高至 100）" << endl;
+    cout << "2 ：手動輸入路線長" << endl;
+    cout << "    選擇程式模式：";
+    cin >> mode_select;
     cout << "----------------------------------------" << endl;
 
     des_x--;  // so that the upper right corner can be
@@ -182,27 +217,53 @@ int main() {
 
     printArray(maze, start_x, des_x, des_y);
 
-    while (true) {
+    if (mode_select == 1) {
         cout << "----------------------------------------" << endl;
-        cout << "輸入路線長：";
-        cin >> path_length;
+        for (int i = 0; i <= 100; i++) {
+            path_length = i;
 
-        if (path_length == -1) {
-            cout << "----------------------------------------" << endl;
-            cout << "掰掰！" << endl;
-            exit(0);
+            int count = 0;
+
+            memset(visited, 0, sizeof visited);
+
+            // start from upper left (0, 0).
+
+            countPaths(maze, path_length, start_x, des_x, des_y, start_y,
+                       start_x, visited, count);
+
+            if (count != 0) {
+                cout << "路線長為 " << path_length << " 的話，有 " << count
+                     << " 條路徑" << endl;
+            }
         }
 
-        int count = 0;
+        cout << "----------------------------------------" << endl;
+        cout << "運算結束，掰掰！" << endl;
+        exit(0);
 
-        memset(visited, 0, sizeof visited);
+    } else {
+        while (true) {
+            cout << "----------------------------------------" << endl;
+            cout << "輸入路線長：";
+            cin >> path_length;
 
-        // start from upper left (0, 0).
+            if (path_length == -1) {
+                cout << "----------------------------------------" << endl;
+                cout << "要離開了？好吧，掰掰！" << endl;
+                exit(0);
+            }
 
-        countPaths(maze, path_length, start_x, des_x, des_y, start_y, start_x,
-                   visited, count);
+            int count = 0;
 
-        cout << "不同路徑數：" << count << " 條路徑" << endl;
+            memset(visited, 0, sizeof visited);
+
+            // start from upper left (0, 0).
+
+            countPaths(maze, path_length, start_x, des_x, des_y, start_y,
+                       start_x, visited, count);
+
+            cout << "不同路徑數：" << count << " 條路徑" << endl;
+        }
     }
 
     return 0;
