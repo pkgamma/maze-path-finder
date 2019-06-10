@@ -164,18 +164,38 @@ int main() {
     // from upper left (1, 1) to defined locatoin (x, y).
     // written by Philip Kuo for Judy's research
 
+    string input;
+    cin >> input;
+
+    while (input.length() != N * N) {
+        cout << "長度不對，再試一次：";
+        cin >> input;
+    }
+
+    int maze[N][N];
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (input[i * N + j] == '1') {
+                maze[i][j] = 1;
+            } else {
+                maze[i][j] = 0;
+            }
+        }
+    }
+
     // ========================================
     // =========== Input Maze Here ============
     // ========================================
     // ========================================
     // == remember to change defined N size ===
 
-    int maze[N][N] = {
-        {0, 0, 1, 1, 1, 0, 0, 0}, {1, 1, 1, 1, 1, 0, 0, 0},
-        {1, 1, 1, 1, 1, 1, 1, 0}, {0, 0, 1, 1, 1, 1, 1, 0},
-        {0, 0, 1, 1, 1, 1, 1, 1}, {0, 0, 0, 0, 1, 1, 1, 1},
-        {0, 0, 0, 0, 1, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0},
-    };
+    // int maze[N][N] = {
+    //     {0, 0, 1, 1, 1, 0, 0, 0}, {1, 1, 1, 1, 1, 0, 0, 0},
+    //     {1, 1, 1, 1, 1, 1, 1, 0}, {0, 0, 1, 1, 1, 1, 1, 0},
+    //     {0, 0, 1, 1, 1, 1, 1, 1}, {0, 0, 0, 0, 1, 1, 1, 1},
+    //     {0, 0, 0, 0, 1, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0},
+    // };
 
     // int maze[N][N] = {{0, 0, 1, 1, 1, 0, 0},
     //                   {1, 1, 1, 1, 1, 0, 0},
@@ -253,7 +273,8 @@ int main() {
             cout << "輸入路線長：";
 
             // cin with exception prevention
-            // taken from: https://stackoverflow.com/questions/10828937/how-to-make-cin-take-only-numbers
+            // taken from:
+            // https://stackoverflow.com/questions/10828937/how-to-make-cin-take-only-numbers
             while (!(cin >> path_length)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
