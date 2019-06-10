@@ -52,7 +52,7 @@ void countPaths(int maze[N][N], int path_length, int des_x, int des_y, int x,
     visited[x][y] = 0;
 }
 
-void printArray(int maze[N][N]) {
+void printArray(int maze[N][N], int starting_y_offset) {
 
     // print first line (starting arrow)
 
@@ -91,7 +91,7 @@ void printArray(int maze[N][N]) {
 
                 if (i != N - 1) {
                     if (maze[i + 1][j] == 1) {
-                        if (j % 2 == 0) {
+                        if ((j + starting_y_offset) % 2 == 0) {
                             temp = temp + "↓   ";
                         } else {
                             temp = temp + "↑   ";
@@ -166,7 +166,7 @@ int main() {
     des_x--;  // so that the upper right corner can be
     des_y--;  // entered as (1, 1) and not (0, 0).
 
-    printArray(maze);
+    printArray(maze, x);
 
     int count = 0;
 
