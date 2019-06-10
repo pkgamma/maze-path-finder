@@ -67,7 +67,7 @@ int findStartX(int maze[N][N]) {
     return 0;
 }
 
-void printArray(int maze[N][N], int start_x) {
+void printArray(int maze[N][N], int start_x, int des_x, int des_y) {
     // print first line (starting arrow)
 
     string first_line = "";
@@ -98,6 +98,8 @@ void printArray(int maze[N][N], int start_x) {
                         } else {
                             cout << "← ";
                         }
+                    } else if (i == des_x && j == des_y) {
+                        cout << "→ ";
                     } else {
                         cout << "  ";
                     }
@@ -149,13 +151,13 @@ int main() {
     // ========================================
     // ========================================
 
-    int maze[N][N] = {{0, 1, 1, 0, 0, 0, 0},
-                      {1, 1, 1, 0, 0, 0, 0},
-                      {1, 1, 1, 0, 0, 0, 0},
+    int maze[N][N] = {{0, 0, 1, 1, 1, 0, 0},
+                      {1, 1, 1, 1, 1, 0, 0},
+                      {1, 1, 1, 1, 1, 1, 0},
+                      {0, 0, 1, 1, 1, 1, 0},
+                      {0, 0, 1, 1, 1, 1, 0},
                       {0, 0, 0, 0, 0, 0, 0},
-                      {0, 0, 0, 0, 0, 0, 0},
-                      {0, 1, 1, 0, 0, 0, 0},
-                      {1, 1, 1, 0, 0, 0, 0},};
+                      {0, 0, 0, 0, 0, 0, 0},};
 
     // ========================================
     // ========================================
@@ -185,7 +187,7 @@ int main() {
     int start_x = findStartX(maze);
     int start_y = 0;
 
-    printArray(maze, start_x);
+    printArray(maze, start_x, des_x, des_y);
 
     int count = 0;
 
