@@ -48,12 +48,21 @@ void countPaths(int maze[N][N], int path_length, int des_x, int des_y, int x,
                        count);
         }
     }
-    
+
     visited[x][y] = 0;
 }
 
-void printArray(int maze[N][N], int starting_y_offset) {
+void findStartX(int maze[N][N], int& start_x) {
+    for (int i = 0; i < N; i++) {
+        if (maze[0][i] == 1) {
+            break;
+        } else {
+            start_x++;
+        }
+    }
+}
 
+void printArray(int maze[N][N], int start_x) {
     // print first line (starting arrow)
 
     string first_line = "";
@@ -91,7 +100,7 @@ void printArray(int maze[N][N], int starting_y_offset) {
 
                 if (i != N - 1) {
                     if (maze[i + 1][j] == 1) {
-                        if ((j + starting_y_offset) % 2 == 0) {
+                        if ((j + start_x) % 2 == 0) {
                             temp = temp + "↓   ";
                         } else {
                             temp = temp + "↑   ";
@@ -135,7 +144,7 @@ int main() {
     // ========================================
     // ========================================
 
-    int maze[N][N] = {{0, 1, 1, 0, 0},
+    int maze[N][N] = {{1, 1, 1, 0, 0},
                       {1, 1, 1, 0, 0},
                       {1, 1, 1, 0, 0},
                       {0, 0, 0, 0, 0},
@@ -166,7 +175,11 @@ int main() {
     des_x--;  // so that the upper right corner can be
     des_y--;  // entered as (1, 1) and not (0, 0).
 
-    printArray(maze, x);
+    int start_x;
+
+    findStartX(maze, start_x);
+
+    printArray(maze, start_x);
 
     int count = 0;
 
