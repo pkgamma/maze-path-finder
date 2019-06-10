@@ -13,9 +13,8 @@ bool isValidCell(int x, int y) {
     return true;
 }
 
-void countPaths(int maze[N][N], int path_length, int start_x, int des_x, int des_y, int x,
-                int y, int visited[N][N], int& count) {
-
+void countPaths(int maze[N][N], int path_length, int start_x, int des_x,
+                int des_y, int x, int y, int visited[N][N], int& count) {
     // note: the x and y notation is flipped here.
 
     if (x == des_x && y == des_y && path_length == 0) {
@@ -32,23 +31,23 @@ void countPaths(int maze[N][N], int path_length, int start_x, int des_x, int des
     if (isValidCell(x, y) && maze[x][y]) {
         // go down
         if (x + 1 < N && !visited[x + 1][y] && ((y + start_x) % 2 == 0)) {
-            countPaths(maze, path_length - 1, start_x, des_x, des_y, x + 1, y, visited,
-                       count);
+            countPaths(maze, path_length - 1, start_x, des_x, des_y, x + 1, y,
+                       visited, count);
         }
         // go up
         if (x - 1 >= 0 && !visited[x - 1][y] && ((y + start_x) % 2 == 1)) {
-            countPaths(maze, path_length - 1, start_x, des_x, des_y, x - 1, y, visited,
-                       count);
+            countPaths(maze, path_length - 1, start_x, des_x, des_y, x - 1, y,
+                       visited, count);
         }
         // go right
         if (y + 1 < N && !visited[x][y + 1] && x % 2 == 0) {
-            countPaths(maze, path_length - 1, start_x, des_x, des_y, x, y + 1, visited,
-                       count);
+            countPaths(maze, path_length - 1, start_x, des_x, des_y, x, y + 1,
+                       visited, count);
         }
         // go left
         if (y - 1 >= 0 && !visited[x][y - 1] && x % 2 == 1) {
-            countPaths(maze, path_length - 1, start_x, des_x, des_y, x, y - 1, visited,
-                       count);
+            countPaths(maze, path_length - 1, start_x, des_x, des_y, x, y - 1,
+                       visited, count);
         }
     }
 
@@ -151,13 +150,11 @@ int main() {
     // ========================================
     // ========================================
 
-    vector<vector<int>> maze = {{0, 0, 1, 1, 1, 0, 0},
-                      {1, 1, 1, 1, 1, 0, 0},
-                      {1, 1, 1, 1, 1, 1, 0},
-                      {0, 0, 1, 1, 1, 1, 0},
-                      {0, 0, 1, 1, 1, 1, 0},
-                      {0, 0, 0, 0, 0, 0, 0},
-                      {0, 0, 0, 0, 0, 0, 0},};
+    int maze[N][N] = {
+        {0, 0, 1, 1, 1, 0, 0}, {1, 1, 1, 1, 1, 0, 0}, {1, 1, 1, 1, 1, 1, 0},
+        {0, 0, 1, 1, 1, 1, 0}, {0, 0, 1, 1, 1, 1, 0}, {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+    };
 
     // ========================================
     // ========================================
@@ -168,18 +165,14 @@ int main() {
     int des_y = 0;
     int path_length = 0;
 
-    cout << endl;
+    cout << "----------------------------------------" << endl;
     cout << "圖形於 main.cpp 輸入完成" << endl;
-    cout << "起點座標完成" << endl;
     cout << "輸入終點座標 (x, y)：" << endl;
     cout << "    輸入 x 值：";
     cin >> des_y;
     cout << "    輸入 y 值：";
     cin >> des_x;
-    cout << "輸入路線長：";
-    cin >> path_length;
-
-    cout << endl;
+    cout << "----------------------------------------" << endl;
 
     des_x--;  // so that the upper right corner can be
     des_y--;  // entered as (1, 1) and not (0, 0).
@@ -187,18 +180,30 @@ int main() {
     int start_x = findStartX(maze);
     int start_y = 0;
 
-    int count = 0;
-
-    memset(visited, 0, sizeof visited);
-
-    // start from upper left (0, 0).
-
-    countPaths(maze, path_length, start_x, des_x, des_y, start_y, start_x, visited, count);
-
-    cout << "由起點（左上）至終點，共有 " << count << " 條路徑" << endl;
-    cout << endl;
-
     printArray(maze, start_x, des_x, des_y);
+
+    while (true) {
+        cout << "----------------------------------------" << endl;
+        cout << "輸入路線長：";
+        cin >> path_length;
+
+        if (path_length == -1) {
+            cout << "----------------------------------------" << endl;
+            cout << "掰掰！" << endl;
+            exit(0);
+        }
+
+        int count = 0;
+
+        memset(visited, 0, sizeof visited);
+
+        // start from upper left (0, 0).
+
+        countPaths(maze, path_length, start_x, des_x, des_y, start_y, start_x,
+                   visited, count);
+
+        cout << "不同路徑數：" << count << " 條路徑" << endl;
+    }
 
     return 0;
 }
