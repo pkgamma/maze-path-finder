@@ -150,20 +150,21 @@ int main() {
                       {0, 0, 1, 1, 1},
                       {0, 0, 1, 1, 1}};
 
+    int visited[N][N];
+
     printArray(maze);
 
-    // stores number of unique paths from source to destination
     int count = 0;
-
-    // 2D matrix to keep track of cells involved in current path
-    int visited[N][N];
 
     memset(visited, 0, sizeof visited);
 
-    // start from source cell (0, 0)
+    // start from upper left (0, 0).
+
     countPaths(maze, path_length, des_x, des_y, 0, 0, visited, count);
 
     cout << "由起點（左上）至終點，共有 " << count << " 條路徑" << endl;
+
+     cout << "\033[1;31mbold red text\033[0m\n";
 
     return 0;
 }
