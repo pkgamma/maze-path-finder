@@ -27,7 +27,7 @@ int findStartingEmptyRow(int maze[N][N]) {
 }
 
 void findUniquePaths(int maze[N][N], int path_length, int start_x, int des_x,
-                int des_y, int x, int y, int visited[N][N], int& count) {
+                     int des_y, int x, int y, int visited[N][N], int& count) {
     // note: the x and y notation is flipped here.
 
     if (x == des_x && y == des_y && path_length == 0) {
@@ -44,23 +44,23 @@ void findUniquePaths(int maze[N][N], int path_length, int start_x, int des_x,
     if (isValid(x, y) && maze[x][y]) {
         // go down
         if (x + 1 < N && !visited[x + 1][y] && ((y + start_x) % 2 == 0)) {
-            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x + 1, y,
-                       visited, count);
+            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x + 1,
+                            y, visited, count);
         }
         // go up
         if (x - 1 >= 0 && !visited[x - 1][y] && ((y + start_x) % 2 == 1)) {
-            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x - 1, y,
-                       visited, count);
+            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x - 1,
+                            y, visited, count);
         }
         // go right
         if (y + 1 < N && !visited[x][y + 1] && x % 2 == 0) {
-            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x, y + 1,
-                       visited, count);
+            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x,
+                            y + 1, visited, count);
         }
         // go left
         if (y - 1 >= 0 && !visited[x][y - 1] && x % 2 == 1) {
-            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x, y - 1,
-                       visited, count);
+            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x,
+                            y - 1, visited, count);
         }
     }
 
@@ -161,7 +161,7 @@ void printMaze(int maze[N][N], int start_x, int des_x, int des_y) {
 
 int main() {
     // this program calculates the number of quique paths
-    // from upper left (1, 1) to defined locatoin (x, y).
+    // from upper left (1, something) to defined locatoin (x, y).
     // written by Philip Kuo for Judy's research
 
     // ========================================
@@ -177,20 +177,17 @@ int main() {
         {0, 0, 0, 0, 1, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0},
     };
 
-    // int maze[N][N] = {{0, 0, 1, 1, 1, 0, 0},
-    //                   {1, 1, 1, 1, 1, 0, 0},
-    //                   {1, 1, 1, 1, 1, 1, 0},
-    //                   {0, 0, 1, 1, 1, 1, 0},
-    //                   {0, 0, 1, 1, 1, 1, 0},
-    //                   {0, 0, 0, 0, 0, 0, 0},
-    //                   {0, 0, 0, 0, 0, 0, 0},};
+    // int maze[N][N] = {
+    //     {0, 0, 1, 1, 1, 0, 0, 0}, {1, 1, 1, 1, 1, 0, 0, 0},
+    //     {1, 1, 1, 1, 1, 1, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0},
+    //     {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0},
+    //     {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0},
+    // };
 
     // ========================================
     // ========================================
 
     int visited[N][N];
-
-    // ========================================
 
     int mode_select_1;
     cout << "----------------------------------------" << endl;
@@ -200,7 +197,10 @@ int main() {
 
     if (mode_select_1 == 1) {
         cout << "----------------------------------------" << endl;
-        cout << "請以 1 表示可拜訪的交會點，0 代表不可，並以單橫行表示要輸入的二維陣列迷宮，以第一橫行為先，左至右輸入，後接其下橫行，依此類推" << endl;
+        cout << "請以 1 表示可拜訪的交會點，0 "
+                "代表不可，並以單橫行表示要輸入的二維陣列迷宮，以第一橫行為先，"
+                "左至右輸入，後接其下橫行，依此類推"
+             << endl;
         cout << "請輸入迷宮：";
         string input;
         cin >> input;
@@ -260,7 +260,7 @@ int main() {
             memset(visited, 0, sizeof visited);
             // start from upper left (0, 0).
             findUniquePaths(maze, path_length, start_x, des_x, des_y, start_y,
-                       start_x, visited, count);
+                            start_x, visited, count);
             if (count != 0) {
                 cout << "路線長為 " << path_length << " 的話，有 " << count
                      << " 條路徑" << endl;
@@ -300,7 +300,7 @@ int main() {
             // start from upper left (0, 0).
 
             findUniquePaths(maze, path_length, start_x, des_x, des_y, start_y,
-                       start_x, visited, count);
+                            start_x, visited, count);
 
             cout << "不同路徑數：" << count << " 條路徑" << endl;
         }
