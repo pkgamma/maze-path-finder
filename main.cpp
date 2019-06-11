@@ -5,7 +5,7 @@ using namespace std;
 
 #define N 8
 
-bool isValidCell(int x, int y) {
+bool isValid(int x, int y) {
     if (x < 0 || y < 0 || x >= N || y >= N) {
         return false;
     }
@@ -26,7 +26,7 @@ int findStartingEmptyRow(int maze[N][N]) {
     return start_empty_y;
 }
 
-void countPaths(int maze[N][N], int path_length, int start_x, int des_x,
+void findUniquePaths(int maze[N][N], int path_length, int start_x, int des_x,
                 int des_y, int x, int y, int visited[N][N], int& count) {
     // note: the x and y notation is flipped here.
 
@@ -41,25 +41,25 @@ void countPaths(int maze[N][N], int path_length, int start_x, int des_x,
 
     visited[x][y] = 1;
 
-    if (isValidCell(x, y) && maze[x][y]) {
+    if (isValid(x, y) && maze[x][y]) {
         // go down
         if (x + 1 < N && !visited[x + 1][y] && ((y + start_x) % 2 == 0)) {
-            countPaths(maze, path_length - 1, start_x, des_x, des_y, x + 1, y,
+            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x + 1, y,
                        visited, count);
         }
         // go up
         if (x - 1 >= 0 && !visited[x - 1][y] && ((y + start_x) % 2 == 1)) {
-            countPaths(maze, path_length - 1, start_x, des_x, des_y, x - 1, y,
+            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x - 1, y,
                        visited, count);
         }
         // go right
         if (y + 1 < N && !visited[x][y + 1] && x % 2 == 0) {
-            countPaths(maze, path_length - 1, start_x, des_x, des_y, x, y + 1,
+            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x, y + 1,
                        visited, count);
         }
         // go left
         if (y - 1 >= 0 && !visited[x][y - 1] && x % 2 == 1) {
-            countPaths(maze, path_length - 1, start_x, des_x, des_y, x, y - 1,
+            findUniquePaths(maze, path_length - 1, start_x, des_x, des_y, x, y - 1,
                        visited, count);
         }
     }
@@ -79,7 +79,7 @@ int findStartX(int maze[N][N]) {
     return 0;
 }
 
-void printArray(int maze[N][N], int start_x, int des_x, int des_y) {
+void printMaze(int maze[N][N], int start_x, int des_x, int des_y) {
     // print first line (starting arrow)
 
     string first_line = "";
@@ -164,38 +164,18 @@ int main() {
     // from upper left (1, 1) to defined locatoin (x, y).
     // written by Philip Kuo for Judy's research
 
-    string input;
-    cin >> input;
-
-    while (input.length() != N * N) {
-        cout << "長度不對，再試一次：";
-        cin >> input;
-    }
-
-    int maze[N][N];
-
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            if (input[i * N + j] == '1') {
-                maze[i][j] = 1;
-            } else {
-                maze[i][j] = 0;
-            }
-        }
-    }
-
     // ========================================
     // =========== Input Maze Here ============
     // ========================================
     // ========================================
     // == remember to change defined N size ===
 
-    // int maze[N][N] = {
-    //     {0, 0, 1, 1, 1, 0, 0, 0}, {1, 1, 1, 1, 1, 0, 0, 0},
-    //     {1, 1, 1, 1, 1, 1, 1, 0}, {0, 0, 1, 1, 1, 1, 1, 0},
-    //     {0, 0, 1, 1, 1, 1, 1, 1}, {0, 0, 0, 0, 1, 1, 1, 1},
-    //     {0, 0, 0, 0, 1, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0},
-    // };
+    int maze[N][N] = {
+        {0, 0, 1, 1, 1, 0, 0, 0}, {1, 1, 1, 1, 1, 0, 0, 0},
+        {1, 1, 1, 1, 1, 1, 1, 0}, {0, 0, 1, 1, 1, 1, 1, 0},
+        {0, 0, 1, 1, 1, 1, 1, 1}, {0, 0, 0, 0, 1, 1, 1, 1},
+        {0, 0, 0, 0, 1, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0},
+    };
 
     // int maze[N][N] = {{0, 0, 1, 1, 1, 0, 0},
     //                   {1, 1, 1, 1, 1, 0, 0},
@@ -210,28 +190,57 @@ int main() {
 
     int visited[N][N];
 
+    // ========================================
+
+    int mode_select_1;
+    cout << "----------------------------------------" << endl;
+    cout << "選擇資料載入模式（1: 手動輸入迷宮 / 2: 使用預設的迷宮）" << endl;
+    cout << "請輸入選擇：";
+    cin >> mode_select_1;
+
+    if (mode_select_1 == 1) {
+        cout << "----------------------------------------" << endl;
+        cout << "請以 1 表示可拜訪的交會點，0 代表不可，並以單橫行表示要輸入的二維陣列迷宮，以第一橫行為先，左至右輸入，後接其下橫行，依此類推" << endl;
+        cout << "請輸入迷宮：";
+        string input;
+        cin >> input;
+
+        while (input.length() != N * N) {
+            cout << "長度好像不對，請再試一次：";
+            cin >> input;
+        }
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (input[i * N + j] == '1') {
+                    maze[i][j] = 1;
+                } else {
+                    maze[i][j] = 0;
+                }
+            }
+        }
+    }
+
     int des_x = 0;
     int des_y = 0;
     int path_length = 0;
-    int mode_select = 0;
 
     cout << "----------------------------------------" << endl;
-    cout << "圖形於 main.cpp 輸入完成" << endl;
-    cout << "輸入終點座標 (x, y)：" << endl;
-    cout << "    輸入 x 值：";
+    cout << "選擇終點座標 (x, y)，左上為 (1, 1)" << endl;
+    cout << "請輸入 x 值：";
     cin >> des_y;
-    cout << "    輸入 y 值：";
+    cout << "請輸入 y 值：";
     cin >> des_x;
+
     while ((des_x - 1) % 2 == 1) {
-        cout << "    我感覺你輸入錯了，請再試一次。輸入 y 值：";
+        cout << "輸入的 y 好像不對，請再試一次：";
         cin >> des_x;
     }
+
+    int mode_select_2 = 0;
     cout << "----------------------------------------" << endl;
-    cout << "1 ：自動尋找所有路徑長（高至 100）" << endl;
-    cout << "2 ：手動輸入路線長" << endl;
-    cout << "    選擇程式模式：";
-    cin >> mode_select;
-    cout << "----------------------------------------" << endl;
+    cout << "選擇程式模式（1: 自動尋找所有路徑長 / 2: 手動輸入路線長）" << endl;
+    cout << "請輸入選擇：";
+    cin >> mode_select_2;
 
     des_x--;  // so that the upper right corner can be
     des_y--;  // entered as (1, 1) and not (0, 0).
@@ -239,22 +248,19 @@ int main() {
     int start_x = findStartX(maze);
     int start_y = 0;
 
-    printArray(maze, start_x, des_x, des_y);
+    cout << "----------------------------------------" << endl;
+    printMaze(maze, start_x, des_x, des_y);
 
-    if (mode_select == 1) {
+    if (mode_select_2 == 1) {
         cout << "----------------------------------------" << endl;
+        cout << "所有 0 至 100 單位長的路徑中：" << endl << endl;
         for (int i = 0; i <= 100; i++) {
             path_length = i;
-
             int count = 0;
-
             memset(visited, 0, sizeof visited);
-
             // start from upper left (0, 0).
-
-            countPaths(maze, path_length, start_x, des_x, des_y, start_y,
+            findUniquePaths(maze, path_length, start_x, des_x, des_y, start_y,
                        start_x, visited, count);
-
             if (count != 0) {
                 cout << "路線長為 " << path_length << " 的話，有 " << count
                      << " 條路徑" << endl;
@@ -267,10 +273,10 @@ int main() {
 
     } else {
         cout << "----------------------------------------" << endl;
-        cout << "輸入 -1 離開程式" << endl;
+        cout << "註：輸入 -1 以離開程式" << endl;
         while (true) {
             cout << "----------------------------------------" << endl;
-            cout << "輸入路線長：";
+            cout << "請輸入路線長：";
 
             // cin with exception prevention
             // taken from:
@@ -278,7 +284,7 @@ int main() {
             while (!(cin >> path_length)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "只能輸入數字喔！請重試一次：";
+                cout << "你輸入的好像不是個數字耶，請再試一次：";
             }
 
             if (path_length == -1) {
@@ -293,7 +299,7 @@ int main() {
 
             // start from upper left (0, 0).
 
-            countPaths(maze, path_length, start_x, des_x, des_y, start_y,
+            findUniquePaths(maze, path_length, start_x, des_x, des_y, start_y,
                        start_x, visited, count);
 
             cout << "不同路徑數：" << count << " 條路徑" << endl;
