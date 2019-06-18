@@ -287,14 +287,15 @@ int main() {
             cout << "----------------------------------------" << endl;
             cout << "請輸入路線長：";
 
-            // cin with exception prevention
-            // taken from:
-            // https://stackoverflow.com/questions/10828937/how-to-make-cin-take-only-numbers
-            while (!(cin >> path_length)) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "你輸入的好像不是個數字耶，請再試一次：";
-            }
+            // commented out because this never works on online cpp compiler
+            // // cin with exception prevention
+            // // taken from:
+            // // https://stackoverflow.com/questions/10828937/how-to-make-cin-take-only-numbers
+            // while (!(cin >> path_length)) {
+            //     cin.clear();
+            //     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            //     cout << "你輸入的好像不是個數字耶，請再試一次：";
+            // }
 
             if (path_length == -1) {
                 cout << "----------------------------------------" << endl;
